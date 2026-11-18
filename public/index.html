@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b0d10">
+  <meta name="theme-color" content="#07080d">
   <title>UniBuddy — Your campus connection starts here</title>
   <meta name="description" content="Meet students across Sri Lanka, share notes and past papers, discover campus spots, and make room for focused study. UniBuddy is coming soon.">
   <meta property="og:type" content="website">
@@ -12,89 +12,209 @@
   <meta property="og:image" content="/assets/campus-community.webp">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/assets/logo-dark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
   <link rel="stylesheet" href="/styles.css">
   <script src="/site-config.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
 <body>
   <div class="reading-progress" aria-hidden="true"></div>
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
   <a class="skip-link" href="#main">Skip to content</a>
+
   <header class="site-header">
-    <div class="container nav-wrap">
-      <a class="brand" href="#home" aria-label="UniBuddy home"><span class="brand-symbol"><img src="/assets/logo-dark.png" width="48" height="48" alt=""></span><span>Uni<span class="orange">buddy</span><span class="brand-dot">.</span></span></a>
-      <button class="menu-toggle" aria-expanded="false" aria-controls="navigation" aria-label="Open navigation"><span></span><span></span></button>
+    <div class="nav-pill">
+      <a class="brand" href="#home" aria-label="UniBuddy home">
+        <svg class="brand-mark" viewBox="0 0 48 48" width="34" height="34" aria-hidden="true"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb23c"/><stop offset="1" stop-color="#ff5a1a"/></linearGradient></defs><rect width="48" height="48" rx="14" fill="url(#bg)"/><path d="M24 8 8 15l16 7 16-7z" fill="#1a0e07"/><path d="M36 17.5v7" stroke="#1a0e07" stroke-width="2" stroke-linecap="round"/><circle cx="17.5" cy="29" r="2.6" fill="#1a0e07"/><circle cx="30.5" cy="29" r="2.6" fill="#1a0e07"/><path d="M15.5 34.5c2.2 4.2 14.8 4.2 17 0" fill="none" stroke="#1a0e07" stroke-width="2.6" stroke-linecap="round"/></svg>
+        <span class="brand-word">Uni<span class="orange">buddy</span></span>
+      </a>
       <nav id="navigation" aria-label="Main navigation">
-        <a href="#about">Our story</a><a href="#features">The good stuff</a><a href="#community">Our community</a>
+        <a href="#about">Story</a><a href="#features">Features</a><a href="#playbook">Playbook</a><a href="#community">Community</a><a href="#faq-title">FAQ</a>
       </nav>
-      <a class="button button-small nav-cta" href="#launch">Be part of it <span aria-hidden="true">↗</span></a>
+      <a class="button button-small nav-cta" href="#launch">Get updates <span aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="navigation" aria-label="Open navigation"><span></span><span></span></button>
     </div>
   </header>
+
   <main id="main">
+    <!-- HERO -->
     <section class="hero container" id="home" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="status-dot"></span> MADE FOR STUDENT LIFE IN SRI LANKA</div>
+        <p class="chip"><span class="status-dot"></span> Made for student life in Sri Lanka</p>
         <h1 id="hero-title">Your campus.<br>Your people.<br><span class="gradient-text">A little closer.</span></h1>
-        <p class="hero-description">The notes you need. The friends you haven’t met. The spot everyone’s talking about. Find your campus circle on UniBuddy.</p>
-        <div class="hero-actions"><a class="button" href="#launch">Get launch updates <span aria-hidden="true">↗</span></a><a class="text-link" href="#features">Take a look around <span aria-hidden="true">↓</span></a></div>
-        <div class="hero-footnote"><span class="mini-faces" aria-hidden="true"><span>✦</span><span>↗</span><span>☺</span></span><span>Different campuses.<br><strong>One shared student experience.</strong></span></div>
+        <p class="hero-description">The notes you need. The friends you haven’t met. The spot everyone’s talking about. Find your campus circle on <strong>UniBuddy</strong>.</p>
+        <div class="hero-actions"><a class="button" href="#launch">Get launch updates <span aria-hidden="true">↗</span></a><a class="button button-ghost" href="#features">Take a look around <span aria-hidden="true">↓</span></a></div>
+        <div class="hero-tags" aria-label="What you can do on UniBuddy">
+          <span>🤝 Meet students</span><span>📚 Share notes</span><span>📍 Find spots</span><span>⏱ Stay focused</span>
+        </div>
       </div>
-      <div class="hero-visual">
-        <div class="visual-topline"><span><span class="status-dot"></span> YOUR NEXT CHAPTER</span><span>01 / CONNECT</span></div>
-        <div class="hero-photo"><img src="/assets/campus-community.webp" width="1672" height="941" alt="UniBuddy concept artwork showing students connecting and sharing campus discoveries" fetchpriority="high"></div>
-        <div class="floating-note"><span class="note-icon" aria-hidden="true">✦</span><div>Good things happen<br><strong>when students connect.</strong></div><span aria-hidden="true">↗</span></div>
-        <div class="visual-caption"><span>CONNECT. LEARN. GROW.</span><span>🇱🇰 FROM CAMPUS TO CAMPUS</span></div>
+
+      <div class="hero-stage">
+        <div class="hero-card tilt" data-tilt>
+          <div class="hero-card-bar"><span class="dots"><i></i><i></i><i></i></span><span class="mono">unibuddy / connect</span><span class="live"><span class="status-dot"></span> concept</span></div>
+          <div class="hero-photo"><img src="/assets/campus-community.webp" width="1672" height="941" alt="UniBuddy concept artwork showing students connecting and sharing campus discoveries" fetchpriority="high"></div>
+        </div>
+        <div class="float-chip chip-a" data-depth="26"><span class="avatar a1">N</span><div><strong>Nethmi · Colombo</strong><small>Computer Science</small></div><b class="follow">Follow</b></div>
+        <div class="float-chip chip-b" data-depth="-20"><span class="ico">📄</span><div><strong>Past papers shared</strong><small>A head start for exams</small></div></div>
+        <div class="float-chip chip-c" data-depth="34"><span class="ring"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" class="ring-bg"/><circle cx="18" cy="18" r="15" class="ring-fg"/></svg><b>25</b></span><div><strong>Focus session</strong><small>One thing at a time</small></div></div>
       </div>
     </section>
 
-    <div class="campus-strip"><div class="container"><span class="strip-label">BUILT TO BRING US TOGETHER</span><span>Universities</span><span class="strip-star" aria-hidden="true">✳</span><span>Higher education institutes</span><span class="strip-star" aria-hidden="true">✳</span><span>Every campus circle</span></div></div>
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Study smart</span><i>✦</i><span>Share more</span><i>✦</i><span>Past papers</span><i>✦</i><span>Campus spots</span><i>✦</i><span>Focus mode</span><i>✦</i><span>Every campus circle</span><i>✦</i>
+        <span>Study smart</span><i>✦</i><span>Share more</span><i>✦</i><span>Past papers</span><i>✦</i><span>Campus spots</span><i>✦</i><span>Focus mode</span><i>✦</i><span>Every campus circle</span><i>✦</i>
+      </div>
+    </div>
 
+    <!-- STORY -->
     <section class="section container story" id="about" aria-labelledby="story-title">
-      <div><p class="eyebrow orange">A BIGGER CAMPUS CIRCLE</p><h2 id="story-title">Student life is better<br>when you <span class="muted">share it.</span></h2></div>
-      <div class="story-copy"><p>Your university is where your journey starts. It doesn’t have to be where your community ends.</p><p>UniBuddy brings the everyday parts of student life together: finding people, sharing what you know, discovering useful places, and staying focused on what’s next.</p><a class="text-link" href="#community">Meet the idea behind UniBuddy <span aria-hidden="true">↗</span></a></div>
+      <p class="eyebrow">A bigger campus circle</p>
+      <h2 id="story-title" class="visually-hidden">Student life is better when you share it.</h2>
+      <p class="story-statement" data-words aria-hidden="true">Your university is where your journey starts. It doesn’t have to be where your community ends. UniBuddy brings finding people, sharing what you know, discovering places and staying focused together in one place.</p>
+      <p class="story-statement-plain visually-hidden">Your university is where your journey starts. It doesn’t have to be where your community ends. UniBuddy brings finding people, sharing what you know, discovering places and staying focused together in one place.</p>
     </section>
 
+    <!-- FEATURES / BENTO -->
     <section class="section features-section" id="features" aria-labelledby="features-title">
       <div class="container">
-        <div class="section-heading"><div><p class="eyebrow orange">LESS SEARCHING. MORE LIVING.</p><h2 id="features-title">A buddy for every<br>part of campus life.</h2></div><p>From your first lecture to your last exam.<br>A little help goes a long way.</p></div>
-        <div class="feature-grid">
-          <article class="feature-card feature-main"><span class="feature-number">01 / CONNECT</span><div class="people-illustration" aria-hidden="true"><span class="person p-one">☺</span><span class="person p-two">☺</span><span class="person p-three">☺</span><span class="connection-label">Your circle is growing ↗</span></div><h3>Your next friend might<br>be one campus away.</h3><p>Discover students by university and department. Follow people who share your interests and keep the conversation going.</p><span class="feature-tag">Find your people <span aria-hidden="true">↗</span></span></article>
-          <article class="feature-card resources-card"><span class="feature-number">02 / SHARE</span><div class="resource-preview" aria-hidden="true"><div><span class="file-icon">PDF</span><span>Past papers<strong>A head start for your next exam</strong></span><span>↗</span></div><div><span class="file-icon">DOC</span><span>Lecture notes<strong>Pass a little knowledge forward</strong></span><span>↗</span></div></div><h3>Good notes deserve<br>good company.</h3><p>Find and share notes, past papers, and study resources. Help the next student the way you wish someone helped you.</p><span class="feature-tag">Study smart. Share more.</span></article>
-          <article class="feature-card spots-card"><span class="feature-number">03 / DISCOVER</span><div class="spot-art" aria-hidden="true"><div class="map-line line-one"></div><div class="map-line line-two"></div><span class="map-pin">⌖</span><span class="map-place">Your new favourite spot</span><span class="map-dot dot-one"></span><span class="map-dot dot-two"></span></div><h3>Find your kind of place.</h3><p>A quiet study corner, a quick bite, or somewhere to catch up. Explore campus spots and student reviews.</p></article>
-          <article class="feature-card focus-card"><span class="feature-number">04 / FOCUS</span><div class="timer-art" aria-hidden="true"><div><strong>25:00</strong><span>ONE THING AT A TIME</span></div></div><h3>Big dreams. Small sessions.</h3><p>Make space for focused study with a built-in focus timer. One session closer to your goals.</p></article>
+        <div class="section-heading"><div><p class="eyebrow">Less searching. More living.</p><h2 id="features-title">A buddy for every<br>part of <span class="gradient-text">campus life.</span></h2></div><p>From your first lecture to your last exam. A little help goes a long way.</p></div>
+
+        <div class="bento">
+          <article class="card spot card-connect" data-spot>
+            <span class="card-tag mono">01 / Connect</span>
+            <div class="art orbit-art" aria-hidden="true">
+              <span class="orbit-ring r1"></span><span class="orbit-ring r2"></span>
+              <span class="orb you">YOU</span>
+              <span class="orb o1">N</span><span class="orb o2">K</span><span class="orb o3">D</span><span class="orb o4">R</span>
+            </div>
+            <h3>Your next friend might be one campus away.</h3>
+            <p>Discover students by university and department. Follow people who share your interests and keep the conversation going.</p>
+          </article>
+
+          <article class="card spot card-share" data-spot>
+            <span class="card-tag mono">02 / Share</span>
+            <div class="art file-art" aria-hidden="true">
+              <div class="file f1"><span class="file-ico">PDF</span><div><strong>Past papers</strong><small>A head start for your next exam</small></div><i>↗</i></div>
+              <div class="file f2"><span class="file-ico">DOC</span><div><strong>Lecture notes</strong><small>Pass a little knowledge forward</small></div><i>↗</i></div>
+            </div>
+            <h3>Good notes deserve good company.</h3>
+            <p>Find and share notes, past papers and study resources. Help the next student the way you wish someone helped you.</p>
+          </article>
+
+          <article class="card spot card-spots" data-spot>
+            <span class="card-tag mono">03 / Discover</span>
+            <div class="art map-art" aria-hidden="true">
+              <svg viewBox="0 0 300 140" preserveAspectRatio="xMidYMid slice"><path class="route" d="M10 110 C 70 40, 120 130, 170 70 S 260 30, 292 60"/></svg>
+              <span class="pin p1"></span><span class="pin p2"></span><span class="pin p3"><b>Your new favourite spot</b></span>
+            </div>
+            <h3>Find your kind of place.</h3>
+            <p>A quiet study corner, a quick bite, or somewhere to catch up. Explore campus spots and student reviews.</p>
+          </article>
+
+          <article class="card spot card-focus" data-spot>
+            <span class="card-tag mono">04 / Focus</span>
+            <div class="art timer-demo" data-timer>
+              <div class="timer-ring">
+                <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="t-bg"/><circle cx="60" cy="60" r="52" class="t-fg"/></svg>
+                <output class="t-time" aria-live="off">25:00</output>
+              </div>
+              <div class="timer-controls">
+                <button type="button" class="t-btn t-toggle" aria-label="Start focus timer demo">Try it ▶</button>
+                <button type="button" class="t-btn t-reset" aria-label="Reset focus timer demo">Reset</button>
+              </div>
+            </div>
+            <h3>Big dreams. Small sessions.</h3>
+            <p>Make space for focused study with a built-in focus timer. One session closer to your goals.</p>
+          </article>
         </div>
         <p class="concept-caption">Illustrative previews inspired by the app. The mobile experience may differ at launch.</p>
       </div>
     </section>
 
-    <section class="journey-section" aria-labelledby="journey-title">
-      <div class="journey-sticky">
-        <div class="container journey-heading"><div><p class="eyebrow orange">THE CAMPUS LIFE PLAYBOOK</p><h2 id="journey-title">Go beyond the <span class="serif-word">ordinary.</span></h2></div><div class="journey-controls"><span class="journey-counter" aria-live="off">01 / 03</span><button class="journey-prev" aria-label="Previous campus story">←</button><button class="journey-next" aria-label="Next campus story">→</button></div></div>
-        <div class="journey-viewport" tabindex="0" aria-label="Campus stories, scroll horizontally or use arrow buttons"><div class="journey-track">
-          <article class="journey-panel panel-connect"><div class="journey-panel-copy"><span class="eyebrow">01 — FIND YOUR PEOPLE</span><h3>New campus.<br>Same <em>vibe.</em></h3><p>That person who gets your course, your music, your ambitions? They might be a campus away.</p><a href="#community" class="round-link" aria-label="Explore the student community">↗</a></div><div class="journey-art circle-art" aria-hidden="true"><span>YOU</span><i>☺</i><i>✦</i><i>↗</i><div class="orbit-label">A SMALL WORLD. A BIGGER CIRCLE.</div></div></article>
-          <article class="journey-panel panel-share"><div class="journey-panel-copy"><span class="eyebrow">02 — PASS IT FORWARD</span><h3>A little help.<br>A big <em>difference.</em></h3><p>The notes that got you through could be the head start someone else needs. Share what you know.</p><a href="#features" class="round-link" aria-label="Explore resource sharing">↗</a></div><div class="journey-art paper-art" aria-hidden="true"><div>THE GOOD NOTES<span>Chapter 01<br>Better, together.</span><b>↗</b></div><div>PASS IT ON<span>Learn something.<br>Share something.</span><b>✦</b></div></div></article>
-          <article class="journey-panel panel-focus"><div class="journey-panel-copy"><span class="eyebrow">03 — MAKE IT COUNT</span><h3>Less scrolling.<br>More <em>doing.</em></h3><p>Put your goals in focus. Find your study rhythm, take a breath, and start with one good session.</p><a href="#launch" class="round-link" aria-label="See UniBuddy launch information">↗</a></div><div class="journey-art big-timer" aria-hidden="true"><div>25<span>MINUTES FOR YOU</span></div><i>ONE SESSION CLOSER ↗</i></div></article>
-        </div></div>
-        <div class="container journey-bottom"><span>YOUR STORY DOESN’T STOP AT YOUR CAMPUS.</span><span class="scroll-hint">KEEP SCROLLING TO EXPLORE →</span></div>
+    <!-- PLAYBOOK (stacking cards) -->
+    <section class="section container playbook" id="playbook" aria-labelledby="journey-title">
+      <div class="section-heading"><div><p class="eyebrow">The campus life playbook</p><h2 id="journey-title">Go beyond the <span class="serif-word">ordinary.</span></h2></div><p>Three small habits that make student life feel a lot bigger.</p></div>
+      <div class="stack">
+        <article class="stack-card s1">
+          <div class="stack-copy"><span class="step mono">01 — Find your people</span><h3>New campus.<br>Same <em>vibe.</em></h3><p>That person who gets your course, your music, your ambitions? They might be a campus away.</p><a href="#community" class="round-link" aria-label="Explore the student community">↗</a></div>
+          <div class="stack-art" aria-hidden="true"><div class="orbit-art mini"><span class="orbit-ring r1"></span><span class="orbit-ring r2"></span><span class="orb you">YOU</span><span class="orb o1">☺</span><span class="orb o2">✦</span><span class="orb o3">↗</span></div></div>
+        </article>
+        <article class="stack-card s2">
+          <div class="stack-copy"><span class="step mono">02 — Pass it forward</span><h3>A little help.<br>A big <em>difference.</em></h3><p>The notes that got you through could be the head start someone else needs. Share what you know.</p><a href="#features" class="round-link" aria-label="Explore resource sharing">↗</a></div>
+          <div class="stack-art" aria-hidden="true"><div class="paper-stack"><div class="paper pa">THE GOOD NOTES<span>Chapter 01<br>Better, together.</span></div><div class="paper pb">PASS IT ON<span>Learn something.<br>Share something.</span></div></div></div>
+        </article>
+        <article class="stack-card s3">
+          <div class="stack-copy"><span class="step mono">03 — Make it count</span><h3>Less scrolling.<br>More <em>doing.</em></h3><p>Put your goals in focus. Find your study rhythm, take a breath, and start with one good session.</p><a href="#launch" class="round-link" aria-label="See UniBuddy launch information">↗</a></div>
+          <div class="stack-art" aria-hidden="true"><div class="big-ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="t-bg"/><circle cx="60" cy="60" r="52" class="t-fg static"/></svg><div><b>25</b><span>minutes for you</span></div></div></div>
+        </article>
       </div>
     </section>
 
+    <!-- COMMUNITY -->
     <section class="section container community" id="community" aria-labelledby="community-title">
-      <div class="network-art"><img src="/assets/island-network.webp" width="1672" height="941" alt="Concept illustration of connections between student communities across Sri Lanka" loading="lazy"><span class="image-label">MANY CAMPUSES. ONE COMMUNITY.</span></div>
-      <div class="community-copy"><p class="eyebrow orange">ROOTED IN SRI LANKA</p><h2 id="community-title">Different journeys.<br><span class="gradient-text">Shared possibilities.</span></h2><p>From Jaffna to Colombo, and all the campuses in between. We’re building a space for university and higher education students to connect beyond their own lecture halls.</p><ul class="benefit-list"><li><span aria-hidden="true">↗</span><div><strong>Meet beyond your department</strong><p>Make room for a new perspective.</p></div></li><li><span aria-hidden="true">↗</span><div><strong>Give a little. Learn a lot.</strong><p>Your knowledge could be someone’s breakthrough.</p></div></li><li><span aria-hidden="true">↗</span><div><strong>Find a sense of belonging</strong><p>Because campus life is more than coursework.</p></div></li></ul></div>
+      <div class="network-art tilt" data-tilt><img src="/assets/island-network.webp" width="1672" height="941" alt="Concept illustration of connections between student communities across Sri Lanka" loading="lazy"><span class="image-label mono">Many campuses. One community.</span></div>
+      <div class="community-copy">
+        <p class="eyebrow">Rooted in Sri Lanka</p>
+        <h2 id="community-title">Different journeys.<br><span class="gradient-text">Shared possibilities.</span></h2>
+        <p class="lead">From Jaffna to Colombo, and all the campuses in between. We’re building a space for university and higher education students to connect beyond their own lecture halls.</p>
+        <ul class="benefit-list">
+          <li><span class="b-ico" aria-hidden="true">🌏</span><div><strong>Meet beyond your department</strong><p>Make room for a new perspective.</p></div></li>
+          <li><span class="b-ico" aria-hidden="true">💡</span><div><strong>Give a little. Learn a lot.</strong><p>Your knowledge could be someone’s breakthrough.</p></div></li>
+          <li><span class="b-ico" aria-hidden="true">🫶</span><div><strong>Find a sense of belonging</strong><p>Because campus life is more than coursework.</p></div></li>
+        </ul>
+      </div>
     </section>
 
-    <section class="section container" aria-labelledby="inside-title"><div class="section-heading"><div><p class="eyebrow orange">A LITTLE SNEAK PEEK</p><h2 id="inside-title">One app. A whole lot<br>of student life.</h2></div><span class="pill">CONCEPT PREVIEW</span></div><button class="preview-button" id="open-preview" aria-haspopup="dialog"><img src="/assets/app-features.webp" width="1536" height="1024" alt="Expand the UniBuddy concept preview: student profiles, resources, campus spots, sharing, and a focus timer" loading="lazy"><span>Explore the full preview <span aria-hidden="true">↗</span></span></button></section>
+    <!-- PREVIEW -->
+    <section class="section container preview-section" aria-labelledby="inside-title">
+      <div class="section-heading"><div><p class="eyebrow">A little sneak peek</p><h2 id="inside-title">One app. A whole lot<br>of student life.</h2></div><span class="pill mono">Concept preview</span></div>
+      <button class="preview-button" id="open-preview" aria-haspopup="dialog"><img src="/assets/app-features.webp" width="1536" height="1024" alt="Expand the UniBuddy concept preview: student profiles, resources, campus spots, sharing, and a focus timer" loading="lazy"><span>Explore the full preview <span aria-hidden="true">↗</span></span></button>
+    </section>
 
-    <section class="section container faq-section" aria-labelledby="faq-title"><div><p class="eyebrow orange">A FEW THINGS TO KNOW</p><h2 id="faq-title">Curious?<br>We like that.</h2></div><div class="faq-list"><details><summary>What is UniBuddy?<span aria-hidden="true">+</span></summary><p>UniBuddy is a mobile application being built for student life in Sri Lanka. It brings student connections, shared academic resources, campus spots, and focused study into one place.</p></details><details><summary>Who is it for?<span aria-hidden="true">+</span></summary><p>Students at universities and higher education institutes across Sri Lanka. You’ll be able to find your own campus community and discover students beyond it.</p></details><details><summary>Can I download the app yet?<span aria-hidden="true">+</span></summary><p>Not yet. We’re preparing for launch. Official download links will appear here when the app is available; we haven’t announced a release date.</p></details><details><summary>Are these real app screenshots?<span aria-hidden="true">+</span></summary><p>The artwork on this website is concept and promotional imagery. It introduces the idea behind UniBuddy; features and visuals may change before launch.</p></details><details><summary>Is UniBuddy affiliated with a university?<span aria-hidden="true">+</span></summary><p>UniBuddy is an independent student community project. University names in the concept artwork describe the intended community and do not imply endorsement or partnership.</p></details></div></section>
+    <!-- FAQ -->
+    <section class="section container faq-section" aria-labelledby="faq-title">
+      <div><p class="eyebrow">A few things to know</p><h2 id="faq-title">Curious?<br>We like that.</h2></div>
+      <div class="faq-list">
+        <details><summary>What is UniBuddy?<span aria-hidden="true">+</span></summary><p>UniBuddy is a mobile application being built for student life in Sri Lanka. It brings student connections, shared academic resources, campus spots, and focused study into one place.</p></details>
+        <details><summary>Who is it for?<span aria-hidden="true">+</span></summary><p>Students at universities and higher education institutes across Sri Lanka. You’ll be able to find your own campus community and discover students beyond it.</p></details>
+        <details><summary>Can I download the app yet?<span aria-hidden="true">+</span></summary><p>Not yet. We’re preparing for launch. Official download links will appear here when the app is available; we haven’t announced a release date.</p></details>
+        <details><summary>Are these real app screenshots?<span aria-hidden="true">+</span></summary><p>The artwork on this website is concept and promotional imagery. It introduces the idea behind UniBuddy; features and visuals may change before launch.</p></details>
+        <details><summary>Is UniBuddy affiliated with a university?<span aria-hidden="true">+</span></summary><p>UniBuddy is an independent student community project. University names in the concept artwork describe the intended community and do not imply endorsement or partnership.</p></details>
+      </div>
+    </section>
 
-    <section class="container launch-section" id="launch" aria-labelledby="launch-title"><div class="launch-orbit" aria-hidden="true"></div><div class="launch-content"><p class="eyebrow"><span class="status-dot"></span> SOMETHING GOOD IS ON THE WAY</p><h2 id="launch-title">Your campus connection<br>starts <span>here.</span></h2><p>We’re getting ready to bring UniBuddy to your campus.<br>Be there for the beginning.</p><a class="button button-light" id="newsletter-link" href="#launch" aria-disabled="true">Launch updates coming soon <span aria-hidden="true">↗</span></a><p class="signup-note" id="signup-note">Our launch notification list isn’t open yet. Check back here for updates.</p><div class="store-links"><span class="store-badge" id="android-link"><span aria-hidden="true">▶</span><span><small>COMING SOON TO</small>Google Play</span></span><span class="store-badge" id="ios-link"><span aria-hidden="true">●</span><span><small>COMING SOON TO</small>App Store</span></span></div></div></section>
+    <!-- LAUNCH -->
+    <section class="container launch-wrap" id="launch" aria-labelledby="launch-title">
+      <div class="launch-section">
+        <div class="launch-blobs" aria-hidden="true"><i></i><i></i></div>
+        <div class="launch-content">
+          <p class="chip chip-dark"><span class="status-dot"></span> Something good is on the way</p>
+          <h2 id="launch-title">Your campus connection<br>starts <span>here.</span></h2>
+          <p>We’re getting ready to bring UniBuddy to your campus. Be there for the beginning.</p>
+          <a class="button button-light" id="newsletter-link" href="#launch" aria-disabled="true">Launch updates coming soon <span aria-hidden="true">↗</span></a>
+          <p class="signup-note" id="signup-note">Our launch notification list isn’t open yet. Check back here for updates.</p>
+          <div class="store-links"><span class="store-badge" id="android-link"><span aria-hidden="true">▶</span><span><small>COMING SOON TO</small>Google Play</span></span><span class="store-badge" id="ios-link"><span aria-hidden="true">●</span><span><small>COMING SOON TO</small>App Store</span></span></div>
+        </div>
+      </div>
+    </section>
   </main>
+
   <footer class="modern-footer">
-    <div class="container footer-invitation"><p class="eyebrow orange">YOUR NEXT CHAPTER STARTS WITH A HELLO.</p><a href="#launch">Let’s make campus<br><span>a little closer.</span><span class="footer-arrow" aria-hidden="true">↗</span></a></div>
-    <div class="container footer-grid"><div class="footer-brand-column"><a class="brand" href="#home"><span class="brand-symbol"><img src="/assets/logo-dark.png" width="48" height="48" alt=""></span><span>Uni<span class="orange">buddy</span>.</span></a><p>Study smart. Share more.<br>A bigger circle for student life in Sri Lanka.</p><span class="footer-status"><span class="status-dot"></span> IN THE MAKING. FOR YOU.</span></div><div class="footer-column"><h3>Explore</h3><a href="#about">Our story</a><a href="#features">Features</a><a href="#community">Community</a><a href="#inside-title">App preview</a></div><div class="footer-column"><h3>What’s next</h3><a href="#launch">Launch updates ↗</a><span>Android · Coming soon</span><span>iOS · Coming soon</span></div><div class="footer-column"><h3>The important stuff</h3><a href="/privacy.html">Privacy policy ↗</a><a href="/terms.html">Terms &amp; conditions ↗</a><button class="footer-link motion-toggle" aria-pressed="false">Pause decorative motion</button><a href="#faq-title">Questions &amp; answers</a></div></div>
-    <div class="container footer-baseline"><span>© <span id="year">2026</span> UniBuddy. All rights reserved.</span><span>INDEPENDENT PROJECT. SHARED POSSIBILITIES.</span><a href="#home">Back to top ↑</a></div>
-    <div class="footer-wordmark" aria-hidden="true">Uni<span>buddy</span><i>✳</i></div>
+    <div class="container footer-invitation"><p class="eyebrow">Your next chapter starts with a hello.</p><a href="#launch">Let’s make campus<br><span>a little closer.</span><span class="footer-arrow" aria-hidden="true">↗</span></a></div>
+    <div class="container footer-grid">
+      <div class="footer-brand-column"><a class="brand" href="#home"><svg class="brand-mark" viewBox="0 0 48 48" width="34" height="34" aria-hidden="true"><rect width="48" height="48" rx="14" fill="url(#bg)"/><path d="M24 8 8 15l16 7 16-7z" fill="#1a0e07"/><path d="M36 17.5v7" stroke="#1a0e07" stroke-width="2" stroke-linecap="round"/><circle cx="17.5" cy="29" r="2.6" fill="#1a0e07"/><circle cx="30.5" cy="29" r="2.6" fill="#1a0e07"/><path d="M15.5 34.5c2.2 4.2 14.8 4.2 17 0" fill="none" stroke="#1a0e07" stroke-width="2.6" stroke-linecap="round"/></svg><span class="brand-word">Uni<span class="orange">buddy</span></span></a><p>Study smart. Share more.<br>A bigger circle for student life in Sri Lanka.</p><span class="footer-status mono"><span class="status-dot"></span> In the making. For you.</span></div>
+      <div class="footer-column"><h3>Explore</h3><a href="#about">Our story</a><a href="#features">Features</a><a href="#community">Community</a><a href="#inside-title">App preview</a></div>
+      <div class="footer-column"><h3>What’s next</h3><a href="#launch">Launch updates ↗</a><span>Android · Coming soon</span><span>iOS · Coming soon</span></div>
+      <div class="footer-column"><h3>The important stuff</h3><a href="/privacy.html">Privacy policy ↗</a><a href="/terms.html">Terms &amp; conditions ↗</a><button class="footer-link motion-toggle" aria-pressed="false">Pause decorative motion</button><a href="#faq-title">Questions &amp; answers</a></div>
+    </div>
+    <div class="container footer-baseline"><span>© <span id="year">2026</span> UniBuddy. All rights reserved.</span><span class="mono">Independent project · Shared possibilities</span><a href="#home">Back to top ↑</a></div>
+    <div class="footer-wordmark" aria-hidden="true">Uni<span>buddy</span></div>
   </footer>
+
   <dialog id="preview-dialog" class="image-dialog" aria-label="UniBuddy concept preview"><button class="dialog-close" aria-label="Close preview">×</button><img src="/assets/app-features.webp" alt="Full promotional concept artwork for UniBuddy’s student features"></dialog>
   <noscript><p class="noscript-note">JavaScript is disabled. You can still explore the page; expandable artwork and launch signup links require JavaScript.</p></noscript>
 </body>

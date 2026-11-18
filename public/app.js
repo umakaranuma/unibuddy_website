@@ -1,5 +1,11 @@
-const menu = document.querySelector('.menu-toggle');
-const navigation = document.querySelector('#navigation');
+/* UniBuddy site behaviour. Motion is enhancement only: content works without JavaScript. */
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+/* ---------- Navigation ---------- */
+const menu = $('.menu-toggle');
+const navigation = $('#navigation');
 function closeMenu() {
   menu.setAttribute('aria-expanded', 'false');
   menu.setAttribute('aria-label', 'Open navigation');
@@ -11,18 +17,19 @@ menu.addEventListener('click', () => {
   menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
   navigation.classList.toggle('is-open', open);
 });
-navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+$$('a', navigation).forEach(link => link.addEventListener('click', closeMenu));
 document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
 document.addEventListener('click', event => { if (!event.target.closest('.site-header')) closeMenu(); });
-window.matchMedia('(min-width: 761px)').addEventListener('change', closeMenu);
-document.querySelector('#year').textContent = new Date().getFullYear();
+window.matchMedia('(min-width: 821px)').addEventListener('change', closeMenu);
+$('#year').textContent = new Date().getFullYear();
 
+/* ---------- Launch / store links (unchanged behaviour) ---------- */
 const config = window.UNIBUDDY_CONFIG || {};
 function safePublicUrl(value) {
   try { const url = new URL(value); return url.protocol === 'https:' ? url.href : null; }
   catch { return null; }
 }
-const newsletter = document.querySelector('#newsletter-link');
+const newsletter = $('#newsletter-link');
 const newsletterUrl = safePublicUrl(config.newsletterUrl);
 if (newsletterUrl) {
   newsletter.href = newsletterUrl;
@@ -31,7 +38,7 @@ if (newsletterUrl) {
   newsletter.target = '_blank';
   newsletter.rel = 'noopener noreferrer';
   newsletter.setAttribute('aria-label', 'Get launch updates — opens subscription form in a new tab');
-  document.querySelector('#signup-note').textContent = 'Opens our subscription form on Brevo. Subscribe there to receive launch updates.';
+  $('#signup-note').textContent = 'Opens our subscription form on Brevo. Subscribe there to receive launch updates.';
 } else {
   newsletter.addEventListener('click', event => event.preventDefault());
 }
@@ -45,42 +52,32 @@ for (const [id, value, label] of [['android-link', config.androidUrl, 'Google Pl
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
   link.setAttribute('aria-label', `Download UniBuddy on ${label} — opens in a new tab`);
-  const small = badge.querySelector('small');
-  small.textContent = 'DOWNLOAD ON';
+  $('small', badge).textContent = 'DOWNLOAD ON';
   link.append(...badge.childNodes);
   badge.replaceWith(link);
 }
 
-const previewDialog = document.querySelector('#preview-dialog');
-document.querySelector('#open-preview').addEventListener('click', () => previewDialog.showModal());
-document.querySelectorAll('dialog').forEach(dialog => {
-  dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('click', event => { if (event.target === dialog) {
+/* ---------- Dialog ---------- */
+const previewDialog = $('#preview-dialog');
+$('#open-preview').addEventListener('click', () => previewDialog.showModal());
+$$('dialog').forEach(dialog => {
+  $('.dialog-close', dialog).addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', event => {
+    if (event.target !== dialog) return;
     const rect = dialog.getBoundingClientRect();
     if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
-  }});
+  });
 });
-// Motion is enhancement only: content remains readable without JavaScript.
+
+/* ---------- Motion preference ---------- */
 const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-const desktopQuery = window.matchMedia('(min-width: 761px)');
-const motionButton = document.querySelector('.motion-toggle');
+const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+const motionButton = $('.motion-toggle');
 let pausedByVisitor = false;
 const motionEnabled = () => !motionQuery.matches && !pausedByVisitor;
-const storySection = document.querySelector('.journey-section');
-const storySticky = document.querySelector('.journey-sticky');
-const storyViewport = document.querySelector('.journey-viewport');
-const panels = [...document.querySelectorAll('.journey-panel')];
-const counter = document.querySelector('.journey-counter');
-let activeStory = 0;
-let framePending = false;
-let storyStart = 0;
-let storyDistance = 1;
-let maxHorizontal = 0;
-let pageDistance = 1;
-let storyInView = false;
-const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-const revealItems = [...document.querySelectorAll('.story > div, .section-heading, .feature-card, .community-copy, .network-art, .preview-button, .faq-section > div, .launch-content, .footer-invitation, .footer-grid')];
+/* ---------- Scroll reveal ---------- */
+const revealItems = $$('.section-heading, .card, .stack-card, .community-copy, .network-art, .preview-button, .faq-section > div, .launch-section, .footer-invitation, .footer-grid, .marquee');
 if ('IntersectionObserver' in window) {
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -88,91 +85,137 @@ if ('IntersectionObserver' in window) {
       entry.target.classList.add('is-visible');
       revealObserver.unobserve(entry.target);
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -25px 0px' });
-  revealItems.forEach((item, index) => {
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  revealItems.forEach(item => {
     item.classList.add('reveal');
     if (item.classList.contains('network-art')) item.classList.add('reveal-side');
-    // Stagger only adjacent cards; do not delay unrelated page sections.
-    item.style.setProperty('--reveal-delay', item.classList.contains('feature-card') ? `${index % 2 * 90}ms` : '0ms');
+    // Stagger siblings inside a grid only; unrelated sections never wait.
+    const siblings = item.parentElement.querySelectorAll(':scope > .card');
+    if (item.classList.contains('card')) item.style.setProperty('--reveal-delay', `${[...siblings].indexOf(item) % 2 * 100}ms`);
     revealObserver.observe(item);
   });
   document.body.classList.add('motion-ready');
-  const storyObserver = new IntersectionObserver(entries => { storyInView = entries[0].isIntersecting; scheduleFrame(); }, { rootMargin: '100px' });
-  storyObserver.observe(storySection);
 }
-function measure() {
-  storyStart = storySection.getBoundingClientRect().top + window.scrollY - 95;
-  storyDistance = Math.max(1, storySection.offsetHeight - storySticky.offsetHeight);
-  maxHorizontal = storyViewport.scrollWidth - storyViewport.clientWidth;
-  pageDistance = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-  scheduleFrame();
+
+/* ---------- Story: words light up as you scroll ---------- */
+const statement = $('[data-words]');
+let words = [];
+if (statement) {
+  const text = statement.textContent.trim();
+  statement.textContent = '';
+  words = text.split(/\s+/).map(word => {
+    const span = document.createElement('span');
+    span.className = 'w';
+    span.textContent = word;
+    statement.append(span, ' ');
+    return span;
+  });
 }
-function updateCounter(index) {
-  activeStory = clamp(index, 0, panels.length - 1);
-  counter.textContent = `${String(activeStory + 1).padStart(2, '0')} / 03`;
-  document.querySelector('.journey-prev').disabled = activeStory === 0;
-  document.querySelector('.journey-next').disabled = activeStory === panels.length - 1;
+
+/* ---------- Active nav link ---------- */
+const navLinks = $$('a', navigation);
+const sections = navLinks.map(link => $(link.getAttribute('href'))?.closest('section') || $(link.getAttribute('href'))).filter(Boolean);
+if ('IntersectionObserver' in window) {
+  const spy = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      navLinks.forEach(link => {
+        const target = $(link.getAttribute('href'));
+        link.classList.toggle('active', (target?.closest('section') || target) === entry.target);
+      });
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  new Set(sections).forEach(section => spy.observe(section));
 }
-function renderMotion() {
+
+/* ---------- Scroll frame: progress, header, parallax, word reveal ---------- */
+const progress = $('.reading-progress');
+const header = $('.site-header');
+const chips = $$('.float-chip');
+let framePending = false;
+function renderFrame() {
   framePending = false;
   const y = window.scrollY;
-  document.querySelector('.reading-progress').style.transform = `scaleX(${clamp(y / pageDistance, 0, 1)})`;
-  if (motionEnabled() && desktopQuery.matches) {
-    if (y < window.innerHeight * 1.5) document.querySelector('.hero-visual').style.setProperty('--hero-drift', `${clamp(y * 0.045, 0, 28)}px`);
-    if (storyInView) {
-      const progress = clamp((y - storyStart) / storyDistance, 0, 1);
-      storyViewport.scrollLeft = progress * maxHorizontal;
-      updateCounter(Math.round(progress * (panels.length - 1)));
-    }
+  const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  progress.style.transform = `scaleX(${clamp(y / max, 0, 1)})`;
+  header.classList.toggle('scrolled', y > 24);
+  if (!motionEnabled()) return;
+  if (y < window.innerHeight * 1.2) chips.forEach(chip => chip.style.setProperty('--py', `${-y * 0.04 * (Number(chip.dataset.depth) / 26)}px`));
+  if (words.length) {
+    const rect = statement.getBoundingClientRect();
+    const start = window.innerHeight * 0.85;
+    const end = window.innerHeight * 0.3;
+    const p = clamp((start - rect.top) / (start - end + rect.height * 0.6), 0, 1);
+    const lit = Math.round(p * words.length);
+    words.forEach((word, index) => word.classList.toggle('on', index < lit));
   }
 }
 function scheduleFrame() {
   if (framePending) return;
   framePending = true;
-  requestAnimationFrame(renderMotion);
+  requestAnimationFrame(renderFrame);
 }
-function goToStory(index) {
-  const target = clamp(index, 0, panels.length - 1);
-  if (desktopQuery.matches && motionEnabled()) {
-    window.scrollTo({ top: storyStart + storyDistance * (target / (panels.length - 1)), behavior: 'smooth' });
-  } else {
-    const panel = panels[target];
-    const panelOffset = panel.offsetLeft - (storyViewport.clientWidth - panel.clientWidth) / 2;
-    storyViewport.scrollTo({ left: panelOffset, behavior: motionEnabled() ? 'smooth' : 'instant' });
-    updateCounter(target);
-  }
-}
-document.querySelector('.journey-prev').addEventListener('click', () => goToStory(activeStory - 1));
-document.querySelector('.journey-next').addEventListener('click', () => goToStory(activeStory + 1));
-storyViewport.addEventListener('keydown', event => {
-  if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
-  event.preventDefault();
-  goToStory(activeStory + (event.key === 'ArrowRight' ? 1 : -1));
-});
-storyViewport.addEventListener('scroll', () => {
-  if (desktopQuery.matches && motionEnabled()) return;
-  const center = storyViewport.scrollLeft + storyViewport.clientWidth / 2;
-  let closest = 0;
-  panels.forEach((panel, index) => {
-    if (Math.abs(panel.offsetLeft + panel.clientWidth / 2 - center) < Math.abs(panels[closest].offsetLeft + panels[closest].clientWidth / 2 - center)) closest = index;
+window.addEventListener('scroll', scheduleFrame, { passive: true });
+window.addEventListener('resize', scheduleFrame, { passive: true });
+
+/* ---------- Card spotlight + 3D tilt (fine pointers only) ---------- */
+$$('[data-spot]').forEach(card => {
+  card.addEventListener('pointermove', event => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+    card.style.setProperty('--my', `${event.clientY - rect.top}px`);
   });
-  updateCounter(closest);
-}, { passive:true });
+});
+$$('[data-tilt]').forEach(element => {
+  element.addEventListener('pointermove', event => {
+    if (!motionEnabled() || !finePointer.matches) return;
+    const rect = element.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    element.style.transform = `perspective(1000px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) scale(1.01)`;
+  });
+  element.addEventListener('pointerleave', () => { element.style.transform = ''; });
+});
+
+/* ---------- Focus-timer demo (real, interactive, nothing stored) ---------- */
+const timer = $('[data-timer]');
+if (timer) {
+  const total = 25 * 60;
+  const circumference = 327;
+  const display = $('.t-time', timer);
+  const arc = $('.t-fg', timer);
+  const toggle = $('.t-toggle', timer);
+  const reset = $('.t-reset', timer);
+  let remaining = total;
+  let interval = null;
+  const paint = () => {
+    display.textContent = `${String(Math.floor(remaining / 60)).padStart(2, '0')}:${String(remaining % 60).padStart(2, '0')}`;
+    arc.style.strokeDashoffset = String(circumference * (1 - remaining / total));
+  };
+  const stop = () => { clearInterval(interval); interval = null; toggle.textContent = remaining === total ? 'Try it ▶' : 'Resume ▶'; toggle.setAttribute('aria-label', 'Start focus timer demo'); };
+  toggle.addEventListener('click', () => {
+    if (interval) { stop(); return; }
+    toggle.textContent = 'Pause ❚❚';
+    toggle.setAttribute('aria-label', 'Pause focus timer demo');
+    interval = setInterval(() => {
+      remaining -= 1;
+      paint();
+      if (remaining <= 0) { stop(); remaining = total; paint(); toggle.textContent = 'Again ▶'; }
+    }, 1000);
+  });
+  reset.addEventListener('click', () => { stop(); remaining = total; paint(); });
+  paint();
+}
+
+/* ---------- Pause / resume decorative motion ---------- */
 function applyMotionPreference() {
   const paused = !motionEnabled();
   document.body.classList.toggle('motion-paused', paused);
   motionButton.setAttribute('aria-pressed', String(paused));
   motionButton.textContent = motionQuery.matches ? 'Reduced motion enabled' : paused ? 'Resume decorative motion' : 'Pause decorative motion';
   motionButton.disabled = motionQuery.matches;
-  measure();
+  scheduleFrame();
 }
 motionButton.addEventListener('click', () => { pausedByVisitor = !pausedByVisitor; applyMotionPreference(); });
 motionQuery.addEventListener('change', applyMotionPreference);
-desktopQuery.addEventListener('change', measure);
-window.addEventListener('scroll', scheduleFrame, { passive:true });
-window.addEventListener('resize', measure, { passive:true });
-window.addEventListener('load', measure, { once:true });
-if (document.fonts) document.fonts.ready.then(measure);
-if ('ResizeObserver' in window) new ResizeObserver(measure).observe(document.body);
 applyMotionPreference();
-updateCounter(0);
