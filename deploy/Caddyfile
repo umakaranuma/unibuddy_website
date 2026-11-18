@@ -1,0 +1,19 @@
+# Standalone deployment. For the existing backend stack, use its integrated
+# Caddy configuration instead of starting a second listener on 80/443.
+{$WEBSITE_DOMAIN:unibuddy.info} {
+    encode zstd gzip
+    root * /srv/website
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        X-Frame-Options DENY
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+    }
+    @assets path /assets/*
+    header @assets Cache-Control "public, max-age=86400"
+    file_server
+}
+www.{$WEBSITE_DOMAIN:unibuddy.info} {
+    redir https://{$WEBSITE_DOMAIN:unibuddy.info}{uri} permanent
+}
