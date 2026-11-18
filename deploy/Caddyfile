@@ -12,6 +12,9 @@
     }
     @assets path /assets/*
     header @assets Cache-Control "public, max-age=86400"
+    @legacy path_regexp legacy ^/(privacy|terms)\.html$
+    redir @legacy /{re.legacy.1} permanent
+    try_files {path} {path}.html
     file_server
 }
 www.{$WEBSITE_DOMAIN:unibuddy.info} {
