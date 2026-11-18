@@ -219,3 +219,132 @@ function applyMotionPreference() {
 motionButton.addEventListener('click', () => { pausedByVisitor = !pausedByVisitor; applyMotionPreference(); });
 motionQuery.addEventListener('change', applyMotionPreference);
 applyMotionPreference();
+
+/* ---------- Round 2: rotating word, particle network, cursor glow, magnet, confetti ---------- */
+const rotatorWord = $('.rotator .word');
+if (rotatorWord) {
+  const list = ['people.', 'notes.', 'spots.', 'circle.', 'buddies.'];
+  let n = 0;
+  setInterval(() => {
+    if (!motionEnabled() || document.hidden) return;
+    rotatorWord.classList.add('out');
+    setTimeout(() => {
+      n = (n + 1) % list.length;
+      rotatorWord.textContent = list[n];
+      rotatorWord.classList.remove('out');
+    }, 380);
+  }, 2600);
+}
+
+const canvas = $('.net');
+if (canvas && canvas.getContext) {
+  const ctx = canvas.getContext('2d');
+  let w = 0, h = 0, dots = [];
+  const mouse = { x: -999, y: -999 };
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const size = () => {
+    const r = canvas.getBoundingClientRect();
+    w = r.width; h = r.height;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = Math.round(clamp(w * h / 14000, 20, 70));
+    dots = Array.from({ length: count }, () => ({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .35, vy: (Math.random() - .5) * .35 }));
+  };
+  const hero = $('.hero');
+  hero.addEventListener('pointermove', e => { const r = canvas.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
+  hero.addEventListener('pointerleave', () => { mouse.x = mouse.y = -999; });
+  let visible = true;
+  new IntersectionObserver(e => { visible = e[0].isIntersecting; }).observe(canvas);
+  const draw = () => {
+    requestAnimationFrame(draw);
+    if (!visible || !motionEnabled()) return;
+    ctx.clearRect(0, 0, w, h);
+    for (const d of dots) {
+      d.x += d.vx; d.y += d.vy;
+      if (d.x < 0 || d.x > w) d.vx *= -1;
+      if (d.y < 0 || d.y > h) d.vy *= -1;
+      const dx = mouse.x - d.x, dy = mouse.y - d.y;
+      if (Math.hypot(dx, dy) < 140) { d.x += dx * .006; d.y += dy * .006; }
+    }
+    for (let i = 0; i < dots.length; i++) {
+      const a = dots[i];
+      ctx.fillStyle = 'rgba(255,178,60,.8)';
+      ctx.beginPath(); ctx.arc(a.x, a.y, 1.8, 0, 6.283); ctx.fill();
+      for (let j = i + 1; j < dots.length; j++) {
+        const b = dots[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < 130) { ctx.strokeStyle = `rgba(255,138,53,${(1 - d / 130) * .35})`; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+      }
+      const m = Math.hypot(a.x - mouse.x, a.y - mouse.y);
+      if (m < 170) { ctx.strokeStyle = `rgba(61,232,180,${(1 - m / 170) * .6})`; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke(); }
+    }
+  };
+  size(); draw();
+  window.addEventListener('resize', size, { passive: true });
+}
+
+const glow = $('.cursor-glow');
+if (glow && finePointer.matches) {
+  window.addEventListener('pointermove', e => {
+    glow.classList.add('on');
+    glow.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+  }, { passive: true });
+  document.documentElement.addEventListener('pointerleave', () => glow.classList.remove('on'));
+}
+
+if (finePointer.matches) {
+  $$('.button:not([aria-disabled=true]), .round-link, .footer-arrow').forEach(el => {
+    const target = el.classList.contains('footer-arrow') ? el.parentElement : el;
+    target.addEventListener('pointermove', e => {
+      if (!motionEnabled()) return;
+      const r = el.getBoundingClientRect();
+      el.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .25}px,${(e.clientY - r.top - r.height / 2) * .35}px)`;
+    });
+    target.addEventListener('pointerleave', () => { el.style.transform = ''; });
+  });
+}
+
+function confetti(x, y) {
+  if (!motionEnabled()) return;
+  const colors = ['#ffb23c', '#ff6a1a', '#3de8b4', '#8b6cff', '#ff3f6c'];
+  for (let i = 0; i < 32; i++) {
+    const piece = document.createElement('i');
+    piece.className = 'confetti';
+    piece.style.background = colors[i % colors.length];
+    piece.style.left = `${x}px`; piece.style.top = `${y}px`;
+    document.body.append(piece);
+    const angle = Math.random() * Math.PI * 2, speed = 120 + Math.random() * 220;
+    const anim = piece.animate([
+      { transform: 'translate(0,0) rotate(0)', opacity: 1 },
+      { transform: `translate(${Math.cos(angle) * speed}px,${Math.sin(angle) * speed + 160}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+    ], { duration: 900 + Math.random() * 500, easing: 'cubic-bezier(.2,.8,.3,1)' });
+    anim.onfinish = () => piece.remove();
+  }
+}
+$$('.t-toggle').forEach(btn => btn.addEventListener('click', () => { const r = btn.getBoundingClientRect(); confetti(r.left + r.width / 2, r.top); }));
+$$('.orb.you, .follow').forEach(el => el.addEventListener('click', () => { const r = el.getBoundingClientRect(); confetti(r.left + r.width / 2, r.top + r.height / 2); }));
+
+/* scroll-linked extras */
+let lastY = window.scrollY;
+const marquees = $$('.marquee');
+const stackCards = $$('.stack-card');
+const previewImg = $('.preview-button img');
+const stickers = $$('.sticker');
+function extraFrame() {
+  requestAnimationFrame(extraFrame);
+  if (!motionEnabled()) return;
+  const y = window.scrollY, v = clamp((y - lastY) * .12, -4, 4);
+  lastY = y;
+  marquees.forEach(m => m.style.setProperty('--skew', `${v.toFixed(2)}deg`));
+  stackCards.forEach((card, i) => {
+    const next = stackCards[i + 1];
+    if (!next || window.innerWidth <= 820) { card.style.setProperty('--sc', 1); return; }
+    const gap = clamp((next.getBoundingClientRect().top - card.getBoundingClientRect().top) / 360, 0, 1);
+    card.style.setProperty('--sc', (0.94 + gap * 0.06).toFixed(3));
+  });
+  if (previewImg) {
+    const r = previewImg.parentElement.getBoundingClientRect();
+    previewImg.style.setProperty('--pp', `${clamp((r.top + r.height / 2 - window.innerHeight / 2) * -.06, -40, 40).toFixed(1)}px`);
+  }
+  if (y < window.innerHeight * 1.5) stickers.forEach((s, i) => s.style.setProperty('--sy', `${(y * (i % 2 ? -.05 : .07)).toFixed(1)}px`));
+}
+extraFrame();

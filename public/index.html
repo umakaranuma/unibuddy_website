@@ -22,6 +22,7 @@
 <body>
   <div class="reading-progress" aria-hidden="true"></div>
   <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="cursor-glow" aria-hidden="true"></div>
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
@@ -41,9 +42,10 @@
   <main id="main">
     <!-- HERO -->
     <section class="hero container" id="home" aria-labelledby="hero-title">
+      <canvas class="net" aria-hidden="true"></canvas><span class="sticker st1" aria-hidden="true">🎓</span><span class="sticker st2" aria-hidden="true">📚</span><span class="sticker st3" aria-hidden="true">☕</span><span class="sticker st4" aria-hidden="true">✏️</span>
       <div class="hero-copy">
         <p class="chip"><span class="status-dot"></span> Made for student life in Sri Lanka</p>
-        <h1 id="hero-title">Your campus.<br>Your people.<br><span class="gradient-text">A little closer.</span></h1>
+        <h1 id="hero-title">Your campus.<br>Your <span class="rotator"><span class="word">people.</span></span><br><span class="gradient-text">A little closer.</span></h1>
         <p class="hero-description">The notes you need. The friends you haven’t met. The spot everyone’s talking about. Find your campus circle on <strong>UniBuddy</strong>.</p>
         <div class="hero-actions"><a class="button" href="#launch">Get launch updates <span aria-hidden="true">↗</span></a><a class="button button-ghost" href="#features">Take a look around <span aria-hidden="true">↓</span></a></div>
         <div class="hero-tags" aria-label="What you can do on UniBuddy">
@@ -134,6 +136,8 @@
         <p class="concept-caption">Illustrative previews inspired by the app. The mobile experience may differ at launch.</p>
       </div>
     </section>
+
+    <div class="marquee marquee-rev" aria-hidden="true"><div class="marquee-track"><span>Meet</span><i>✦</i><span>Learn</span><i>✦</i><span>Share</span><i>✦</i><span>Explore</span><i>✦</i><span>Focus</span><i>✦</i><span>Grow</span><i>✦</i><span>Meet</span><i>✦</i><span>Learn</span><i>✦</i><span>Share</span><i>✦</i><span>Explore</span><i>✦</i><span>Focus</span><i>✦</i><span>Grow</span><i>✦</i></div></div>
 
     <!-- PLAYBOOK (stacking cards) -->
     <section class="section container playbook" id="playbook" aria-labelledby="journey-title">
