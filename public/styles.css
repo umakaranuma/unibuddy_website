@@ -384,5 +384,5 @@ dialog::backdrop{background:rgba(0,0,0,.8);backdrop-filter:blur(10px)}
 .legal-content h2{font-size:26px;letter-spacing:-.03em;margin-bottom:14px}
 .legal-content p{font-size:15px;color:var(--text-2);line-height:1.85;margin-bottom:0}
 .legal-footer{border-top:1px solid var(--line);padding-block:26px;display:flex;justify-content:space-between;gap:20px;font-size:14px;color:var(--text-2)}
-.legal-page .brand{font-size:24px}
+.legal-page .brand{font-size:24px}.legal-header{position:relative;z-index:1}.legal-footer a:hover,.legal-header .text-link:hover{color:var(--orange-2)}.legal-content section{transition:background .3s}
 @media(max-width:760px){.legal-layout{grid-template-columns:1fr;gap:28px}.legal-nav{position:static;display:grid;grid-template-columns:1fr 1fr}.legal-nav .eyebrow{grid-column:1/-1}.legal-content section{gap:14px}.legal-hero>p:not(.eyebrow){font-size:20px}}
