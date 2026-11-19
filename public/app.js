@@ -59,7 +59,7 @@ for (const [id, value, label] of [['android-link', config.androidUrl, 'Google Pl
 
 /* ---------- Dialog ---------- */
 const previewDialog = $('#preview-dialog');
-$('#open-preview').addEventListener('click', () => previewDialog.showModal());
+$('#open-preview')?.addEventListener('click', () => previewDialog.showModal());
 $$('dialog').forEach(dialog => {
   $('.dialog-close', dialog).addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', event => {
@@ -348,3 +348,115 @@ function extraFrame() {
   if (y < window.innerHeight * 1.5) stickers.forEach((s, i) => s.style.setProperty('--sy', `${(y * (i % 2 ? -.05 : .07)).toFixed(1)}px`));
 }
 extraFrame();
+
+/* ---------- App showcase: tabs, auto-play, mini focus timer, follow + theme toggles ---------- */
+(() => {
+  const root = $('[data-showcase]');
+  if (!root) return;
+  const tabs = $$('.show-tab', root);
+  const screens = $$('.screen', root);
+  const navItems = $$('[data-nav]', root);
+  const phone = $('.phone', root);
+  const durations = { home: 7500, map: 7000, notes: 7000, focus: 7500, students: 6500, chat: 9000, reviews: 7000, settings: 9000 };
+  let current = 0;
+  let elapsed = 0;
+  let hovering = false;
+  let inView = false;
+  let last = performance.now();
+  let focusTick = null;
+
+  function stopFocusDemo() { clearInterval(focusTick); focusTick = null; }
+  function startFocusDemo(screen) {
+    const time = $('.f-time', screen), arc = $('.fr-fg', screen), main = $('.f-main', screen);
+    const total = 25 * 60;
+    let remaining = total;
+    const paint = () => {
+      time.textContent = `${String(Math.floor(remaining / 60)).padStart(2, '0')}:${String(remaining % 60).padStart(2, '0')}`;
+      arc.style.strokeDashoffset = String(327 * (1 - remaining / total));
+    };
+    main.textContent = 'Start focus';
+    paint();
+    stopFocusDemo();
+    setTimeout(() => { main.textContent = 'Pause'; }, 900);
+    focusTick = setInterval(() => {
+      if (!motionEnabled()) return;
+      remaining = remaining <= 40 ? total : remaining - 40;
+      paint();
+    }, 500);
+  }
+
+  function activate(index, fromUser) {
+    current = (index + tabs.length) % tabs.length;
+    elapsed = 0;
+    const name = tabs[current].dataset.go;
+    tabs.forEach((tab, i) => {
+      const on = i === current;
+      tab.classList.toggle('active', on);
+      tab.setAttribute('aria-selected', String(on));
+      tab.tabIndex = on ? 0 : -1;
+      $('.tab-bar', tab).style.transform = 'scaleX(0)';
+    });
+    let activeScreen = null;
+    screens.forEach(screen => {
+      const on = screen.dataset.screen === name;
+      screen.classList.toggle('active', on);
+      screen.toggleAttribute('inert', !on);
+      screen.setAttribute('aria-hidden', String(!on));
+      if (on) activeScreen = screen;
+    });
+    navItems.forEach(item => item.classList.toggle('on', item.dataset.nav === activeScreen.dataset.tab));
+    stopFocusDemo();
+    if (name === 'focus') startFocusDemo(activeScreen);
+    if (fromUser && window.innerWidth <= 900) tabs[current].scrollIntoView({ inline: 'center', block: 'nearest', behavior: motionEnabled() ? 'smooth' : 'auto' });
+    else if (window.innerWidth <= 900) tabs[current].parentElement.scrollTo({ left: tabs[current].offsetLeft - 20, behavior: 'smooth' });
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => activate(i, true));
+    tab.addEventListener('keydown', event => {
+      const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[event.key];
+      if (!step) return;
+      event.preventDefault();
+      activate(i + step, true);
+      tabs[current].focus();
+    });
+  });
+
+  root.addEventListener('pointerenter', () => { hovering = true; });
+  root.addEventListener('pointerleave', () => { hovering = false; });
+  root.addEventListener('focusin', () => { hovering = true; });
+  root.addEventListener('focusout', () => { hovering = false; });
+  new IntersectionObserver(entries => { inView = entries[0].isIntersecting; }, { threshold: 0.25 }).observe(root);
+
+  function loop(now) {
+    requestAnimationFrame(loop);
+    const dt = now - last;
+    last = now;
+    if (!inView || hovering || document.hidden || !motionEnabled()) return;
+    elapsed += dt;
+    const total = durations[tabs[current].dataset.go] || 7000;
+    $('.tab-bar', tabs[current]).style.transform = `scaleX(${clamp(elapsed / total, 0, 1)})`;
+    if (elapsed >= total) activate(current + 1, false);
+  }
+  requestAnimationFrame(loop);
+
+  /* Follow buttons */
+  $$('.fol', root).forEach(btn => btn.addEventListener('click', () => {
+    const on = btn.classList.toggle('is');
+    btn.textContent = on ? 'Following' : 'Follow';
+    if (on) { const r = btn.getBoundingClientRect(); confetti(r.left + r.width / 2, r.top + r.height / 2); }
+  }));
+
+  /* Theme switch actually restyles the phone */
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const seg = $$('.seg button', root);
+  function setTheme(mode) {
+    const dark = mode === 'dark' || (mode === 'system' && systemDark.matches);
+    phone.classList.toggle('dark', dark);
+    phone.classList.toggle('light', !dark);
+    seg.forEach(button => button.classList.toggle('on', button.dataset.theme === mode));
+  }
+  seg.forEach(button => button.addEventListener('click', () => setTheme(button.dataset.theme)));
+
+  activate(0, false);
+})();
